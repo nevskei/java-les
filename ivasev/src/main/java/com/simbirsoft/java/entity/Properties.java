@@ -30,6 +30,7 @@ public class Properties implements PropertiesInterface {
     private final String EXTENSION = "properties";
     
     public Properties() throws IOException {
+        System.out.println(2);
         properties = new HashMap<String, Property>() {
             {
                 put("FIO", new Property("FIO", "ิศฮ", ""));
