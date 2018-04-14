@@ -5,13 +5,19 @@
  */
 package com.simbirsoft.java.entity;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import com.simbirsoft.java.entity.Property;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.nio.charset.Charset;
 
 /**
  *
@@ -20,36 +26,39 @@ import com.simbirsoft.java.entity.Property;
 public class Properties implements PropertiesInterface {
     
     private Map<String, Property> properties;
-    private Path path = Paths.get("src/main/java/com/simbirsoft/java/properties");
+    private final String DIR_NAME = "src/main/java/com/simbirsoft/java/";
+    private final String EXTENSION = "properties";
     
     public Properties() throws IOException {
         properties = new HashMap<String, Property>() {
             {
-                put("FIO", new Property("FIO", "–§–ò–û", ""));
-                put("DOB", new Property("DOB", "–î–∞—Ç–∞ —Ä–æ–∂–¥–µ–Ω–∏—è", ""));
-                put("phone", new Property("phone", "–¢–µ–ª–µ—Ñ–æ–Ω", ""));
+                put("FIO", new Property("FIO", "‘»Œ", ""));
+                put("DOB", new Property("DOB", "ƒ‡Ú‡ ÓÊ‰ÂÌËˇ", ""));
+                put("phone", new Property("phone", "“ÂÎÂÙÓÌ", ""));
                 put("email", new Property("email", "e-mail", ""));
                 put("skype", new Property("skype", "Skype", ""));
                 put("avatar", new Property("avatar", "", ""));
-                put("target", new Property("target", "–¶–µ–ª—å", ""));
-                put("experience", new Property("experience", "–û–ø—ã—Ç —Ä–∞–±–æ—Ç—ã", ""));
-                put("education", new Property("education", "–û–±—Ä–∞–∑–æ–≤–∞–Ω–∏–µ", ""));
-                put("addeducation", new Property("addeducation", "–î–æ–ø. –æ–±—Ä–∞–∑. –∏ –∫—É—Ä—Å—ã", ""));
+                put("target", new Property("target", "÷ÂÎ¸", ""));
+                put("experience", new Property("experience", "ŒÔ˚Ú ‡·ÓÚ˚", ""));
+                put("education", new Property("education", "Œ·‡ÁÓ‚‡ÌËÂ", ""));
+                put("addeducation", new Property("addeducation", "ƒÓÔ. Ó·‡Á. Ë ÍÛÒ˚", ""));
             }
         };
-        
-        if (Files.exists(path)) {
-            Files.lines(path).forEach((strln) -> {
-                int seporat = strln.indexOf("=");
-                String tag = strln.substring(0, seporat);
-                Property prop = properties.get(tag);
-                if (prop != null) {
-                    prop.setValue(strln.substring(seporat + 1));
-                }
-            });
-        } else {
-            System.out.println("–§–∞–π–ª –Ω–µ —Å—É—â–µ—Å—Ç–≤—É–µ—Ç.");
+        File dir = new File(DIR_NAME);
+        String[] filenames = dir.list(new ExtensionFilter(EXTENSION));
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < filenames.length; i++) {
+            Thread thread = new ReadFilesThread(this, DIR_NAME+filenames[i]);
+            threads.add(thread);
+            thread.start();
         }
+        threads.forEach((Thread thread)->{
+            try {
+                thread.join();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Properties.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }
     
     public Map<String, Property> getList() {
@@ -62,5 +71,49 @@ public class Properties implements PropertiesInterface {
     
     public void put(String key, Property val){
         properties.put(key, val);
+    }
+    
+    private static class ExtensionFilter implements FilenameFilter {
+ 
+        private final String extension;
+ 
+        public ExtensionFilter(String ext) {
+            extension = ext;
+        }
+ 
+        @Override
+        public boolean accept(File dir, String name) {
+            return name.endsWith(extension);
+        }
+ 
+    }
+    
+    public class ReadFilesThread extends Thread {
+        private Properties properties;
+        private final String path;
+
+        ReadFilesThread(Properties properties, String path) {
+            this.properties = properties;
+            this.path = path;
+        }
+
+        public void run() {
+            java.util.Properties property = new java.util.Properties();
+            try {
+                property.load(new InputStreamReader(new FileInputStream(path), Charset.forName("UTF-8")));
+                properties.getList().forEach((key, prop)->{
+                    String value = property.getProperty(key);
+                    if (value != null) {
+                        prop.setValue(value);
+                    }
+                }) ;
+            } catch (FileNotFoundException e) {
+                System.out.println("ÕÂ Ì‡È‰ÂÌ Ù‡ÈÎ Ì‡ÒÚÓÂÍ");
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+                
     }
 }

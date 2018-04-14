@@ -16,8 +16,8 @@ public class Property {
     
     private String value;
     
-    public Property(String c, String t, String v) {
-        code = c;
+    public Property(String code, String t, String v) {
+        code = code;
         title = t;
         value = v;
     }

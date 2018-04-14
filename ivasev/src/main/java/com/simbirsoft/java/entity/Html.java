@@ -15,7 +15,7 @@ import java.util.List;
 public class Html implements HtmlInterface {
     private StringBuilder html = new StringBuilder("<!DOCTYPE html><html>\n"
         + "    <head>\n"
-        + "       <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"
+        + "       <meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\">\n"
         + "       <title>Java</title>\n"
         + "       <!-- Latest compiled and minified CSS -->\n"
         + "<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\" integrity=\"sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u\" crossorigin=\"anonymous\">\n"
