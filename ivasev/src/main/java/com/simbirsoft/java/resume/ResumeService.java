@@ -15,34 +15,48 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 
 @Service
 public class ResumeService {
     
+    private Boolean fromDb = true;
     private final String DIR_NAME = "src/main/java/com/simbirsoft/java/";
     private final String EXTENSION = "properties";
+    private ResumeRepository repository;
+
+    public ResumeService(ResumeRepository repository) {
+        this.repository = repository;
+    }
+    
+    
     
     public ResumeDto getResume() {
-        ResumeDto resume = new ResumeDto();
-        
-        File dir = new File(DIR_NAME);
-        String[] filenames = dir.list(new ResumeService.ExtensionFilter(EXTENSION));
-        List<Thread> threads = new ArrayList<>();
-        for (int i = 0; i < filenames.length; i++) {
-            Thread thread = new ResumeService.ReadFilesThread(resume, DIR_NAME+filenames[i]);
-            threads.add(thread);
-            thread.start();
-        }
-        threads.forEach((Thread thread)->{
-            try {
-                thread.join();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ResumeService.class.getName()).log(Level.SEVERE, null, ex);
+
+            Resume resume = repository.getOne(1L);
+        if (resume == null) {
+            ResumeDto resumeDto = new ResumeDto();
+            File dir = new File(DIR_NAME);
+            String[] filenames = dir.list(new ResumeService.ExtensionFilter(EXTENSION));
+            List<Thread> threads = new ArrayList<>();
+            for (int i = 0; i < filenames.length; i++) {
+                Thread thread = new ResumeService.ReadFilesThread(resumeDto, DIR_NAME+filenames[i]);
+                threads.add(thread);
+                thread.start();
             }
-        });
+            threads.forEach((Thread thread)->{
+                try {
+                    thread.join();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ResumeService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            return resumeDto;
+        }
         return resume;
     }
     
