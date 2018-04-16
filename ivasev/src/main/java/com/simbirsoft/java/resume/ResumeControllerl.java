@@ -7,15 +7,13 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("resume")
-public class ResumeController {
+public class ResumeControllerl {
     
     @Autowired
-    private ResumeRepository repository;
+    private ResumeServiceImpl resumeService;
     
     @RequestMapping(method = RequestMethod.GET)
     public String index(ModelMap modelMap) {
-        ResumeService resumeService = new ResumeService(repository);
-        
         ResumeDto resume = resumeService.getResume();
         modelMap.put("fio", resume.getFio());
         modelMap.put("dob", resume.getDob());
