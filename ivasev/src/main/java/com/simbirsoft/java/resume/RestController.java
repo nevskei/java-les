@@ -1,5 +1,6 @@
 package com.simbirsoft.java.resume;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
@@ -18,9 +19,25 @@ public class RestController {
         return resume;
     }
     
+    @RequestMapping(value="/rest/list", method = RequestMethod.POST)
+    @ResponseBody
+    public Boolean addListResume(@RequestBody List<Resume> resumeList) {
+        resumeList.forEach((Resume resume) -> {
+            repository.save(resume);
+        });
+        return true;
+    }
+    
+    @RequestMapping(value= "rest/list", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Resume> getListResume() {
+        List<Resume> resumeList = repository.findAll();
+        return resumeList;
+    }
+    
     @RequestMapping(value= "rest/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Resume getMyData(@PathVariable String id) {
+    public Resume getResume(@PathVariable String id) {
         Resume resume = repository.getOne(new Long(id));
         return resume;
     }
