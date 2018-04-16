@@ -3,25 +3,26 @@
  */
 package com.simbirsoft.java;
 
+import com.simbirsoft.java.service.ResumePropertiesImpl;
+import com.simbirsoft.java.service.HtmlImpl;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.simbirsoft.java.entity.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.*;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+@SpringBootApplication
 public class App
-{
+{    
     public static void main( String[] args ) throws IOException
     {
-
-        Properties properties = new Properties();
-        Html html = new Html(properties);
+        ConfigurableApplicationContext context = SpringApplication.run(App.class, args);
+        HtmlImpl html = context.getBean(HtmlImpl.class);
         byte[] src = html.get().toString().getBytes();
         try {
             Files.write(Paths.get("src/main/java/com/simbirsoft/java/index.html"), src);

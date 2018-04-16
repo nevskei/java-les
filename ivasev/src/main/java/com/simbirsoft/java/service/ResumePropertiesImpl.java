@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simbirsoft.java.entity;
+package com.simbirsoft.java.service;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,17 +12,18 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import com.simbirsoft.java.entity.Property;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.Properties;
+import org.springframework.stereotype.Service;
 
-/**
- *
- * @author admin
- */
-public class Properties implements PropertiesInterface {
+@Service
+public class ResumePropertiesImpl implements ResumeProperties {
     
     private Map<String, Property> properties;
     private Path path = Paths.get("src/main/java/com/simbirsoft/java/properties");
     
-    public Properties() throws IOException {
+    public ResumePropertiesImpl() throws IOException {
         properties = new HashMap<String, Property>() {
             {
                 put("FIO", new Property("FIO", "ФИО", ""));
@@ -37,19 +38,15 @@ public class Properties implements PropertiesInterface {
                 put("addeducation", new Property("addeducation", "Доп. образ. и курсы", ""));
             }
         };
-        
-        if (Files.exists(path)) {
-            Files.lines(path).forEach((strln) -> {
-                int seporat = strln.indexOf("=");
-                String tag = strln.substring(0, seporat);
-                Property prop = properties.get(tag);
-                if (prop != null) {
-                    prop.setValue(strln.substring(seporat + 1));
-                }
-            });
-        } else {
-            System.out.println("Файл не существует.");
-        }
+        Properties prop = new Properties();
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();           
+        InputStream stream = loader.getResourceAsStream("myProp.properties");
+        prop.load(new InputStreamReader(stream, Charset.forName("UTF-8")));
+        properties.forEach((tag, property)->{
+            String value = prop.getProperty(tag);
+            if (value != null)
+                property.setValue(value);
+        });
     }
     
     public Map<String, Property> getList() {
