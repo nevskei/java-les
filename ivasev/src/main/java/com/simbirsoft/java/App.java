@@ -3,8 +3,7 @@
  */
 package com.simbirsoft.java;
 
-import com.simbirsoft.java.service.ResumePropertiesImpl;
-import com.simbirsoft.java.service.HtmlImpl;
+import com.simbirsoft.java.service.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,7 +21,7 @@ public class App
     public static void main( String[] args ) throws IOException
     {
         ConfigurableApplicationContext context = SpringApplication.run(App.class, args);
-        HtmlImpl html = context.getBean(HtmlImpl.class);
+        Html html = context.getBean(Html.class);
         byte[] src = html.get().toString().getBytes();
         try {
             Files.write(Paths.get("src/main/java/com/simbirsoft/java/index.html"), src);

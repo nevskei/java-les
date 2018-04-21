@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class HtmlImpl implements Html {
     @Autowired
-    private ResumePropertiesImpl properties;
+    private ResumeProperties properties;
     
     public static void main( String[] args ) throws IOException
     {
