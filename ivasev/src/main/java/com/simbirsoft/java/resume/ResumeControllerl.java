@@ -1,6 +1,7 @@
 package com.simbirsoft.java.resume;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class ResumeControllerl {
     
     @Autowired
-    private ResumeServiceImpl resumeService;
+    private ResumeService resumeService;
     
     @RequestMapping(method = RequestMethod.GET)
     public String index(ModelMap modelMap) {
