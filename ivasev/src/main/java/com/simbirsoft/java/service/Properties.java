@@ -3,15 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simbirsoft.java.entity;
+package com.simbirsoft.java.service;
 
+import com.simbirsoft.java.entity.Property;
 import java.util.Map;
 
 /**
  *
  * @author admin
  */
-public interface PropertiesInterface {
+public interface Properties {
 
     Map<String, Property> getList();
     

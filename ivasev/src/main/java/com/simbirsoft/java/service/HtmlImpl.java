@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simbirsoft.java.entity;
+package com.simbirsoft.java.service;
 
+import com.simbirsoft.java.entity.Property;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * @author admin
  */
-public class Html implements HtmlInterface {
+public class HtmlImpl implements Html {
     private StringBuilder html = new StringBuilder("<!DOCTYPE html><html>\n"
         + "    <head>\n"
         + "       <meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\">\n"
@@ -42,10 +43,10 @@ public class Html implements HtmlInterface {
     {
         @SuppressWarnings("resource") 
         ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
-        Html  html = (Html) ctx.getBean("html");
+        HtmlImpl  html = (HtmlImpl) ctx.getBean("html");
     }
     
-    public Html(Properties properties) throws IOException{
+    public HtmlImpl(Properties properties) throws IOException{
         this.properties = properties;
         firstBlockItems.add("FIO");
         firstBlockItems.add("DOB");

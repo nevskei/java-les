@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simbirsoft.java.entity;
+package com.simbirsoft.java.service;
 
+import com.simbirsoft.java.entity.Property;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,13 +24,13 @@ import java.nio.charset.Charset;
  *
  * @author admin
  */
-public class Properties implements PropertiesInterface {
+public class PropertiesImpl implements Properties {
     
     private Map<String, Property> properties;
     private final String DIR_NAME = "src/main/java/com/simbirsoft/java/";
     private final String EXTENSION = "properties";
     
-    public Properties() throws IOException {
+    public PropertiesImpl() throws IOException {
         System.out.println(2);
         properties = new HashMap<String, Property>() {
             {
@@ -57,7 +58,7 @@ public class Properties implements PropertiesInterface {
             try {
                 thread.join();
             } catch (InterruptedException ex) {
-                Logger.getLogger(Properties.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(PropertiesImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
@@ -90,10 +91,10 @@ public class Properties implements PropertiesInterface {
     }
     
     public class ReadFilesThread extends Thread {
-        private Properties properties;
+        private PropertiesImpl properties;
         private final String path;
 
-        ReadFilesThread(Properties properties, String path) {
+        ReadFilesThread(PropertiesImpl properties, String path) {
             this.properties = properties;
             this.path = path;
         }
