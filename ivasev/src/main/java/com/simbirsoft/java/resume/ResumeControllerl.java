@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class ResumeControllerl {
     
     @Autowired
-    private ResumeServiceImpl resumeService;
+    private ResumeService resumeService;
     
     @RequestMapping(method = RequestMethod.GET)
     public String index(ModelMap modelMap) {
@@ -19,6 +19,7 @@ public class ResumeControllerl {
         modelMap.put("dob", resume.getDob());
         modelMap.put("avatar", resume.getAvatar());
         modelMap.put("education", resume.getEducation());
+        modelMap.put("addeducation", resume.getAddeducation());
         modelMap.put("email", resume.getEmail());
         modelMap.put("experience", resume.getExperience());
         modelMap.put("phone", resume.getPhone());
